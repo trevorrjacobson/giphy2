@@ -1,0 +1,85 @@
+.active {
+  color: aqua;
+  background-color: peru;
+}
+.favorites {
+  color: black;
+  background-color: orchid;
+}
+
+.gifBox {
+  background-color: black;
+  color: chartreuse;
+}
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.link,
+.btn {
+  color: white;
+}
+
+.link {
+  flex-basis: calc(100% / 3 - 10px);
+  background-color: blue;
+  text-decoration: none;
+  padding: 5px;
+  flex-grow: 1;
+}
+.btn {
+  background-color: rgb(255, 61, 61);
+}
+
+.link:not(.active):hover {
+  background-color: rgb(255, 0, 191);
+}
+
+.form {
+  width: 75%;
+  margin: 25px auto;
+  text-align: right;
+}
+
+.form-field {
+  text-align: left;
+  flex-direction: column;
+}
+
+.form-field,
+.btn {
+  margin: 5p x 10px;
+}
+
+.btn {
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.gif {
+  max-width: 100%;
+  display: block;
+  margin: 5px auto;
+  max-height: 200px;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.faveBtn {
+  width: 50%;
+  display: block;
+  margin: auto auto 0px auto;
+  padding: 5px;
+  background-color: rgb(255, 8, 214);
+}
