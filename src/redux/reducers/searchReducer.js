@@ -2,7 +2,7 @@ import { SET_SEARCH, CLEAR_SEARCH } from "../actions";
 
 const initialSearchState = [];
 
-export function searchReducer(state = initialSearchState, action) {
+export default function searchReducer(state = initialSearchState, action) {
   switch (action.type) {
     case SET_SEARCH:
       return [...action.search];

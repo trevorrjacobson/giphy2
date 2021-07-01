@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import { clearFavorites, clearUser, clearSearch } from "./redux/actions";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -7,97 +9,64 @@ import {
   Switch,
 } from "react-router-dom";
 import "./App.css";
-import Favs from "./components/Favs";
+import Favorites from "./components/Favs";
 import Login from "./components/Login";
 import ProtectedRoute from "./shared/ProtectedRoute";
 import Search from "./components/Search";
 
-function App() {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const addFavorite = useCallback((toAdd) => {
-    setFavorites((curr) => [...curr, toAdd]);
-  }, []);
-  const deleteFavorite = useCallback(
-    (id) => {
-      let filtered = favorites.filter((val) => val.id !== id);
-      setFavorites(filtered);
-    },
-    [favorites]
-  );
+function App({ username, clearFavorites, clearSearch, clearUser }) {
   return (
     <Router>
-      <nav className="flexWrap">
-         {!loggedInUser && ( 
-        <NavLink
-          activeClassName="active"
-          className="link textCenter"
-          to="/login"
-        >
-          Login
-        </NavLink>
-         )} 
-        {loggedInUser && (
-        <>
+      <nav className="flex-wrap">
+        {!username && (
           <NavLink
             activeClassName="active"
-            className="link textCenter"
-            to="/search"
-          >
-            Search
-          </NavLink>
-
-          <NavLink
-            activeClassName="active"
-            className="link textCenter"
-            to="/favs"
-          >
-            Favorites
-          </NavLink>
-          <NavLink
-            className="link textCenter"
+            className="link text-center"
             to="/login"
-            onClick={() => {
-              setLoggedInUser(null);
-            }}
           >
-            Logout
+            Login
           </NavLink>
-        </>
-         )} 
+        )}
+        {username && (
+          <>
+            <NavLink
+              activeClassName="active"
+              className="link text-center"
+              to="/search"
+            >
+              Search
+            </NavLink>
+
+            <NavLink
+              activeClassName="active"
+              className="link text-center"
+              to="/favorites"
+            >
+              Favorites
+            </NavLink>
+            <NavLink
+              className="link text-center"
+              to="/login"
+              onClick={() => {
+                clearFavorites();
+                clearSearch();
+                clearUser();
+              }}
+            >
+              Logout
+            </NavLink>
+          </>
+        )}
       </nav>
       <main>
         <Switch>
+          <ProtectedRoute path="/login" reqUser={false} component={Login} />
+          <ProtectedRoute path="/search" reqUser={true} component={Search} />
           <ProtectedRoute
-            path="/login"
-            reqUser={false}
-            loggedInUser={loggedInUser}
-          >
-            <Login setLoggedInUser={setLoggedInUser} />
-          </ProtectedRoute>
-          <ProtectedRoute
-            path="/search"
+            path="/favorites"
             reqUser={true}
-            loggedInUser={loggedInUser}
-          >
-            <Search
-              loggedInUser={loggedInUser}
-              addFavorite={addFavorite}
-              deleteFavorite={deleteFavorite}
-              favorites={favorites}
-            />
-          </ProtectedRoute>
-          <ProtectedRoute
-            path="/favs"
-            reqUser={true}
-            loggedInUser={loggedInUser}
-          >
-            <Favs
-              loggedInUser={loggedInUser}
-              favorites={favorites}
-              deleteFavorite={deleteFavorite}
-            />
-          </ProtectedRoute>
+            component={Favorites}
+          />
           <Route path="*">
             <Redirect to="/login" />
           </Route>
@@ -107,4 +76,16 @@ function App() {
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    username: state.user.username,
+  };
+}
+
+const mapDispatchToProps = {
+  clearFavorites,
+  clearUser,
+  clearSearch,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

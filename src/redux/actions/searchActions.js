@@ -1,10 +1,10 @@
-export const SET_SEARCH = "Set User";
-export const CLEAR_SEARCH = "Clear User";
-
-export function setSearch(search) {
-  return { type: SET_USER, search };
-}
+export const CLEAR_SEARCH = "Clear Search";
+export const SET_SEARCH = "Set Search";
 
 export function clearSearch() {
-  return { type: CLEAR_USER };
+  return { type: CLEAR_SEARCH };
+}
+
+export function setSearch(search) {
+  return { type: SET_SEARCH, search };
 }

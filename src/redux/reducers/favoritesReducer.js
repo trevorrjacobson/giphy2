@@ -2,7 +2,7 @@ import { ADD_FAVORITE, DELETE_FAVORITE, CLEAR_FAVORITES } from "../actions";
 
 const initialFavoritesState = [];
 
-export function searchReducer(state = initialFavoritesState, action) {
+export default function searchReducer(state = initialFavoritesState, action) {
   switch (action.type) {
     case ADD_FAVORITE:
       return [...state, action.gif];
@@ -10,7 +10,7 @@ export function searchReducer(state = initialFavoritesState, action) {
     case DELETE_FAVORITE:
       return state.filter((gif) => gif.id !== action.id);
 
-    case CLEAR_FAVORITE:
+    case CLEAR_FAVORITES:
       return [];
 
     default:

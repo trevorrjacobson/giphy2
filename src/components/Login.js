@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+import { connect } from "react-redux";
+import { setUser } from "../redux/actions";
 
-const Login = ({ setLoggedInUser }) => {
+
+const Login = ({ setUser: setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  // const history = useHistory();
   return (
     <>
-      <h2 className="textCenter">Login</h2>
+      <h2 className="text-center">Login</h2>
       <form className="form">
-        <div className="formField flexWrap">
+        <div className="form-field flex-wrap">
           <label htmlFor="username">Username</label>
           <input
             id="username"
@@ -17,7 +19,7 @@ const Login = ({ setLoggedInUser }) => {
             value={username}
           />
         </div>
-        <div className="formField flexWrap">
+        <div className="form-field flex-wrap">
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -32,8 +34,8 @@ const Login = ({ setLoggedInUser }) => {
           onClick={(e) => {
             e.preventDefault();
             if (username.length > 4 && password.length > 4) {
-              setLoggedInUser(username);
-              history.push("/search");
+              setUser(username);
+              // history.push("/search");
             }
           }}
         >
@@ -43,5 +45,13 @@ const Login = ({ setLoggedInUser }) => {
     </>
   );
 };
+function mapStateToProps(state) {
+  return {};
+}
 
-export default Login;
+const mapDispatchToProps = {
+  setUser,
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

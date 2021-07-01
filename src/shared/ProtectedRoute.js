@@ -1,12 +1,20 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
-function ProtectedRoute({ loggedInUser, path, reqUser, children }) {
-  if ((loggedInUser && reqUser) || (!loggedInUser && !reqUser)) {
-    return <Route path={path}>{children}</Route>;
+function ProtectedRoute({ username, path, reqUser, component }) {
+  if ((username && reqUser) || (!username && !reqUser)) {
+    return <Route path={path} component={component} />;
   } else {
     return <Redirect to={reqUser ? "/login" : "/search"} />;
   }
 }
 
-export default ProtectedRoute;
+function mapStateToProps(state) {
+  return {
+    username: state.user.username,
+  };
+}
+
+export default connect(mapStateToProps, {})(ProtectedRoute);
+

@@ -1,17 +1,33 @@
-import React, { useMemo, useState } from "react";
-import Display from "./Display";
+import React, { useEffect, useMemo, useState } from "react";
+import GifDisplay from "./Display";
 import useFetch from "../hooks/useFetch";
+import { connect } from "react-redux";
+import { setSearch, addFavorite, deleteFavorite } from "../redux/actions";
 
-const Search = ({ addFavorite, deleteFavorite, favorites, loggedInUser }) => {
+const Search = ({
+  addFavorite,
+  deleteFavorite,
+  favorites,
+  username,
+  setSearch,
+  search,
+}) => {
   const [searchField, setSearchField] = useState("");
   const [query, setQuery] = useState("");
   const { data, loading, error } = useFetch(query);
   const faveIds = useMemo(() => {
     return favorites.map((val) => val.id);
   }, [favorites]);
+
+  useEffect(() => {
+    if (data) {
+      setSearch(data.data);
+    }
+  }, [data]);
+
   return (
     <div>
-      <h2 className="text-center">Welcome {loggedInUser}</h2>
+      <h2 className="text-center">Welcome {username}</h2>
       <form className="form">
         <div className="form-field flex-wrap">
           <label htmlFor="search">Search</label>
@@ -34,10 +50,10 @@ const Search = ({ addFavorite, deleteFavorite, favorites, loggedInUser }) => {
       </form>
       {loading && <div className="text-center">Loading Gifs</div>}
       {error && <div className="text-center">{error}</div>}
-      {data && (
+      {search && (
         <div className="flex-wrap">
-          {data.data.map((gif) => (
-            <Display
+          {search.map((gif) => (
+            <GifDisplay
               deleteFavorite={deleteFavorite}
               addFavorite={addFavorite}
               isFave={faveIds.includes(gif.id)}
@@ -53,4 +69,18 @@ const Search = ({ addFavorite, deleteFavorite, favorites, loggedInUser }) => {
   );
 };
 
-export default Search;
+function mapStateToProps(state) {
+  return {
+    username: state.user.username,
+    favorites: state.favorites,
+    search: state.search,
+  };
+}
+
+const mapDispatchToProps = {
+  deleteFavorite,
+  addFavorite,
+  setSearch,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

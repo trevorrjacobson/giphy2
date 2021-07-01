@@ -1,13 +1,15 @@
 import React from "react";
-import Display from "./Display";
+import GifDisplay from "./Display";
+import { connect } from "react-redux";
+import { deleteFavorite } from "../redux/actions";
 
-const Favs = ({ favorites, deleteFavorite, loggedInUser }) => {
+const Favorites = ({ favorites, deleteFavorite, username }) => {
   return (
     <>
-      <h2 className="textCenter">{loggedInUser}'s Favorite Gifs</h2>
+      <h2 className="text-center">Favorites for {username}</h2>
       <div className="flex-wrap">
         {favorites.map((gif) => (
-          <Display
+          <GifDisplay
             id={gif.id}
             isFave={true}
             deleteFavorite={deleteFavorite}
@@ -21,4 +23,15 @@ const Favs = ({ favorites, deleteFavorite, loggedInUser }) => {
   );
 };
 
-export default Favs;
+function mapStateToProps(state) {
+  return {
+    username: state.user.username,
+    favorites: state.favorites,
+  };
+}
+
+const mapDispatchToProps = {
+  deleteFavorite,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);

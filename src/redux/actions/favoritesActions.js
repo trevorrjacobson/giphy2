@@ -8,6 +8,6 @@ export function addFavorite(gif) {
 export function deleteFavorite(id) {
   return { type: DELETE_FAVORITE, id };
 }
-export function clearFavorite() {
+export function clearFavorites() {
   return { type: CLEAR_FAVORITES };
 }
